@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"github.com/enriquebris/imaginary/detector"
+	"net/http"
 )
 
 func indexController(w http.ResponseWriter, r *http.Request) {
