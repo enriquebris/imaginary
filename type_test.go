@@ -27,23 +27,27 @@ func TestExtractImageTypeFromMime(t *testing.T) {
 func TestIsImageTypeSupported(t *testing.T) {
 	files := []struct {
 		name     string
+		extra    string
 		expected bool
 	}{
-		{"image/jpeg", true},
-		{"image/png", true},
-		{"image/webp", true},
-		{"IMAGE/JPEG", true},
-		{"png", false},
-		{"multipart/form-data; encoding=utf-8", false},
-		{"application/json", false},
-		{"image/gif", false},
-		{"text/plain", false},
-		{"blablabla", false},
-		{"", false},
+		{"image/jpeg", "", true},
+		{"image/png", "", true},
+		{"image/webp", "", true},
+		{"IMAGE/JPEG", "", true},
+		{"png", "", false},
+		{"multipart/form-data; encoding=utf-8", "", false},
+		{"application/json", "", false},
+		{"image/gif", "", false},
+		{"text/plain", "", false},
+		{"blablabla", "", false},
+		{"", "", false},
+		{"image/png", "abcde", false},
+		{"", "png", true},
+		{"", "webp", true},
 	}
 
 	for _, file := range files {
-		if IsImageMimeTypeSupported(file.name) != file.expected {
+		if IsImageMimeTypeSupported(file.name, file.extra) != file.expected {
 			t.Fatalf("Invalid type: %s != %t", file.name, file.expected)
 		}
 	}
