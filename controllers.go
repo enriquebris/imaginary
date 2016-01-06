@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/enriquebris/imaginary/detector"
 	"net/http"
 )
 
@@ -48,7 +49,13 @@ func imageController(o ServerOptions, operation Operation) func(http.ResponseWri
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request, buf []byte, Operation Operation) {
-	mimeType := http.DetectContentType(buf)
+	//mimeType := http.DetectContentType(buf)
+	format := detector.DetectContentType(buf)
+	mimeType := format.Mime
+	if format.Extra != "" {
+		mimeType = format.Extra
+	}
+
 	if IsImageMimeTypeSupported(mimeType) == false {
 		ErrorReply(w, ErrUnsupportedMedia)
 		return
